@@ -1,5 +1,10 @@
 <canvas></canvas>
 
+<ul class="spawn-model">
+  <li ($click)="spawnModel('ufo-babylon', 'ufo.babylon')">Spawn UFO</li>
+  <li ($click)="spawnModel('mp5k-babylon', 'mp5k.babylon')">Spawn MP5K</li>
+</ul>
+
 <span class="fps-display">
   FPS: {{fpsCounter}}
 </span>

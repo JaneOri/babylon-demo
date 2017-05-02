@@ -37,7 +37,7 @@ export const ViewModel = DefineMap.extend({
 
   initScene () {
     var scene = new BABYLON.Scene( this.engine );
-    scene.clearColor = new BABYLON.Color3( 0, 0, 0 );
+    scene.clearColor = new BABYLON.Color3( 0.25, 0.25, 0.25 );
 
     // disable things we aren't using
     scene.probesEnabled = false;
@@ -86,6 +86,61 @@ export const ViewModel = DefineMap.extend({
     // Params: name, subdivisions, size, scene
     var sphere = BABYLON.Mesh.CreateSphere( "sphere1", 16, 2, this.scene );
     sphere.position.y = 1;
+  },
+
+  wrapMeshesInRootContainer ( name, meshes ) {
+    var container = new BABYLON.Mesh( name, this.scene );
+    var ids = {};
+
+    for ( let i = 0; i < meshes.length; i++ ) {
+      let mesh = meshes[i];
+      let parent = mesh.parent || mesh;
+      while ( parent.parent && parent.parent !== container ) {
+        parent = parent.parent;
+      }
+      if ( !ids[ parent.id ] ) {
+        ids[ parent.id ] = true;
+        parent.parent = container;
+      }
+    }
+
+    return container;
+  },
+
+  spawnModel ( folder, filename ) {
+    var vm = this;
+
+    // Params: meshesNames, rootUrl, sceneFilename, scene, onsuccess, progressCallBack, onerror
+    BABYLON.SceneLoader.ImportMesh(
+      "",
+      "/src/static/3d/" + folder + "/",
+      filename,
+      this.scene,
+      function ( meshes ) {
+        console.log("Spawned successfully", arguments);
+
+        var rootMesh = vm.wrapMeshesInRootContainer( filename + Math.random(), meshes );
+
+        if ( filename.indexOf("ufo") === 0 ) {
+
+          rootMesh.position.x = 4;
+          rootMesh.position.y = 3;
+          rootMesh.position.z = 5;
+          rootMesh.scaling.copyFromFloats( 3.5, 3.5, 3.5 );
+
+        } else if ( filename.indexOf("mp5k") === 0 ) {
+
+          rootMesh.position.copyFromFloats( 0, 3, 4 );
+          rootMesh.scaling.copyFromFloats( 0.025, 0.025, 0.025 );
+        }
+      },
+      function () {
+        console.log("Spawn Progress", arguments);
+      },
+      function () {
+        console.log("Spawn failed", arguments);
+      }
+    );
   },
 
   mainRenderLoop () {
