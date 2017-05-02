@@ -43,6 +43,10 @@ Commit 2 - basic 3D render with an ArcRotateCamera
         - getLightByName()
         - getEngine()
 
+Commit 3 - spawning models
+  - wrap in container mesh for easy position/rotation/scaling modification
+
+Commit 4 - Add controls and ground material
 
 
 
