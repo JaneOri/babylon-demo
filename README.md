@@ -14,12 +14,36 @@ npm install
 
 # Step 1 - getting set up
 
-npm install donejs@1
-donejs add app using-babylon
-cd using-babylon/
-donejs add component components/babylon-canvas babylon-canvas
-npm install babylonjs --save
-npm install lodash --save
+Commit 1 - command line stuff
+  npm install donejs@1
+  donejs add app using-babylon
+  cd using-babylon/
+  donejs add component components/babylon-canvas babylon-canvas
+  npm install babylonjs --save
+  npm install lodash --save
+
+Commit 2 - basic 3D render with an ArcRotateCamera
+  Notes:
+    Engine
+      - do we use antiailising?
+      - Is it fullscreen?
+      - is it using pointer lock API?
+      - How long does it take to render a frame / fps
+      - runRenderLoop()
+      - resize()
+      - enableVR() / disableVR()
+
+    Scene
+      - contains all the stuff you'd render or use to render
+        - objects, color settings, materials, skymap, fog effects, gravity, lights, particles, etc
+      - access things with methods similar to DOM
+        - getCameraByName()
+        - getMeshByName()
+        - getMaterialByName()
+        - getLightByName()
+        - getEngine()
+
+
 
 
 

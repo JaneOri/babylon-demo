@@ -6,7 +6,10 @@
     <can-import from="using-babylon/styles.less" />
     <can-import from="using-babylon/app" export-as="viewModel" />
 
-    <h1>{{message}}</h1>
+    {{^if isServer}}
+      <can-import from="using-babylon/components/babylon-canvas/" />
+      <babylon-canvas></babylon-canvas>
+    {{/if}}
 
     {{#switch env.NODE_ENV}}
       {{#case "production"}}

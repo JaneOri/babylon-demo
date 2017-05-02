@@ -1,1 +1,5 @@
-<p>{{message}}</p>
+<canvas></canvas>
+
+<span class="fps-display">
+  FPS: {{fpsCounter}}
+</span>

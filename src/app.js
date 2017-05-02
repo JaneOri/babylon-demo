@@ -10,6 +10,10 @@ const AppViewModel = DefineMap.extend({
   title: {
     value: 'using-babylon',
     serialize: false
+  },
+  isServer: {
+    value: System.isPlatform( "server" ),
+    serialize: false
   }
 });
 
