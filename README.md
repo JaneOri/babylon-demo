@@ -2,28 +2,19 @@
 
 Welcome to the using-babylon DoneJS application!
 
-## Getting started
+# Commit 1 - command line stuff
 
-To install all dependencies, (e.g. after cloning it from a Git repository) run
+  - npm install donejs@1
+  - donejs add app using-babylon
+  - cd using-babylon/
+  - donejs add component components/babylon-canvas babylon-canvas
+  - npm install babylonjs --save
+  - npm install lodash --save
 
-```
-npm install donejs -g
-npm install
-```
+# Commit 2 - basic 3D render with an ArcRotateCamera
 
-
-# Step 1 - getting set up
-
-Commit 1 - command line stuff
-  npm install donejs@1
-  donejs add app using-babylon
-  cd using-babylon/
-  donejs add component components/babylon-canvas babylon-canvas
-  npm install babylonjs --save
-  npm install lodash --save
-
-Commit 2 - basic 3D render with an ArcRotateCamera
   Notes:
+
     Engine
       - do we use antiailising?
       - Is it fullscreen?
@@ -43,13 +34,18 @@ Commit 2 - basic 3D render with an ArcRotateCamera
         - getLightByName()
         - getEngine()
 
-Commit 3 - spawning models
+# Commit 3 - spawning models
+
   - wrap in container mesh for easy position/rotation/scaling modification
 
-Commit 4 - Add controls and ground material
+# Commit 4 - Add controls and ground material
 
-Commit 5 - Add highlighting, mouse picking, and show how I add modular features
+# Commit 5 - Add highlighting, mouse picking, and show how I add modular features
 
+
+
+
+----
 
 ## Running tests
 
