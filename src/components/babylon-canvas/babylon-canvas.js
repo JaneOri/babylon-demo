@@ -4,11 +4,32 @@ import './babylon-canvas.less';
 import view from './babylon-canvas.stache';
 import BABYLON from 'babylonjs/babylon.max';
 import _debounce from 'lodash/debounce';
+import _throttle from 'lodash/throttle';
 import { normalizedEventKey } from '../../util/event-helpers';
+import Picking from '../../features/picking.js';
 
 export const ViewModel = DefineMap.extend({
   message: {
     value: 'This is the babylon-canvas component'
+  },
+  pickingFI: "any",
+  hoverItem: "any",
+  curMousePos: {
+    type: "any",
+    value: {
+      x: -1,
+      y: -1
+    }
+  },
+  mousemoveLastMousePos: {
+    type: "any",
+    value: {
+      x: -1,
+      y: -1
+    }
+  },
+  pickingPredicate ( mesh ) {
+    return mesh.name !== "ground1";
   },
 
   canvas: {
@@ -198,7 +219,10 @@ export default Component.extend({
 
       var antialiasing = true;
       var adaptToDeviceRatio = true;
-      var engine = new BABYLON.Engine( canvas, antialiasing, null, true );
+      var options = {
+        stencil: true
+      };
+      var engine = new BABYLON.Engine( canvas, antialiasing, options, true );
 
       vm.set({
         canvas,
@@ -211,6 +235,8 @@ export default Component.extend({
 
       vm.addStuffToScene();
 
+      var x = new Picking({ scene: vm.scene });
+      vm.pickingFI = x;
       vm.mainRenderLoop();
 
       window.bcvm = vm;
@@ -224,6 +250,27 @@ export default Component.extend({
       },
       100
     ),
+
+    "{document} mousemove": _throttle(function ( $doc, $ev ) {
+      var vm = this.viewModel;
+      var touches = $ev.touches || ($ev.originalEvent && $ev.originalEvent.touches);
+      var pageX = $ev.pageX || touches && touches[ 0 ] && touches[ 0 ].pageX || 0;
+      var pageY = $ev.pageY || touches && touches[ 0 ] && touches[ 0 ].pageY || 0;
+
+      vm.mousemoveLastMousePos.x = vm.curMousePos.x;
+      vm.mousemoveLastMousePos.y = vm.curMousePos.y;
+
+      vm.curMousePos.x = pageX;
+      vm.curMousePos.y = pageY;
+    }, 10),
+
+    "{document} click": function ( $doc, $ev ) {
+      var vm = this.viewModel;
+      vm.selectedItem = vm.hoverItem;
+      while (vm.selectedItem.parent) {
+        vm.selectedItem = vm.selectedItem.parent;
+      }
+    },
 
     "{document} keydown": function ( $doc, $ev ) {
       var norm = normalizedEventKey( $ev );
@@ -247,6 +294,10 @@ export default Component.extend({
     "{viewModel} renderCount": function () {
       var vm = this.viewModel;
       var heldInfo = vm.heldInfo;
+
+      // calls scene.pick
+      var picked = vm.pickingFI && vm.pickingFI.pick( vm.curMousePos, vm.pickingPredicate ) || {};
+      vm.hoverItem = picked.pickedMesh;
 
       var selectedItem = vm.selectedItem;
       if ( !selectedItem ) {

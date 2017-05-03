@@ -48,7 +48,7 @@ Commit 3 - spawning models
 
 Commit 4 - Add controls and ground material
 
-
+Commit 5 - Add highlighting, mouse picking, and show how I add modular features
 
 
 ## Running tests
